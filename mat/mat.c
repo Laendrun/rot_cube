@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:45:35 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/14 20:02:37 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/15 00:28:26 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ void	ft_free_matrix(float **m, int rows)
 	free(m);
 }
 
-float		**ft_vec_to_matrix(t_vector3 *v)
+float		**ft_vec_to_matrix(t_vector3 v)
 {
 	float	**m = ft_create_matrix(&(t_vector2){3, 1});
-	m[0][0] = v->x;
-	m[1][0] = v->y;
-	m[2][0] = v->z;
+	m[0][0] = v.x;
+	m[1][0] = v.y;
+	m[2][0] = v.z;
 	return (m);
 }
 
@@ -93,17 +93,30 @@ t_vector2	ft_matrix_to_vec2(float **m)
 	return (v);
 }
 
-void	ft_print_vector2(t_vector2 *v)
+void	ft_print_vector2(t_vector2 *v, char *s)
 {
-	printf("=====VECTOR 2=====\n");
+	printf("===== %s =====\n", s);
 	printf("v->x : %f\n", v->x);
 	printf("v->y : %f\n", v->y);
 }
 
-void	ft_print_vector3(t_vector3 *v)
+void	ft_print_vector3(t_vector3 *v, char *s)
 {
-	printf("=====VECTOR 3=====\n");
+	printf("===== %s =====\n", s);
 	printf("v->x : %f\n", v->x);
 	printf("v->y : %f\n", v->y);
 	printf("v->z : %f\n", v->z);
+}
+
+void	ft_scale_vector2(t_vector2 *v, int s)
+{
+	v->x *= s;
+	v->y *= s;
+}
+
+void	ft_scale_vector3(t_vector3 *v, int s)
+{
+	v->x *= s;
+	v->y *= s;
+	v->z *= s;
 }

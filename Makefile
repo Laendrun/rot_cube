@@ -4,7 +4,7 @@ MAT_SRC = $(addprefix mat/, mat.c)
 OBJ := $(SRC:%.c=%.o)
 MAT_OBJ := $(MAT_SRC:%.c=%.o)
 
-CCFLAGS = -Wextra -Wall -Werror
+CCFLAGS =
 
 all: $(NAME)
 

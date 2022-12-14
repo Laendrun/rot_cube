@@ -6,60 +6,53 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:35:57 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/14 21:01:10 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/15 00:55:01 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rot_cube.h"
 
-int	main(void)
+int	main(int ac, char *av[])
 {
 	t_env env;
+	if (ac == 2)
+		env.distance = atof(av[1]);
+	else if (ac == 3)
+	{
+		env.scale = atof(av[1]);
+		env.distance = atof(av[2]);
+	}
+	else
+	{
+		env.distance = 1;
+		env.scale = 100;
+	}
+
 	env.angle = 0.01;
+	env.points = malloc(8 * sizeof(t_vector3));
+	env.points_matrices = malloc(8 * sizeof(float **));
+	env.rotated = malloc(8 * sizeof(float **));
+	env.projected = malloc(8 * sizeof(float **));
+	env.final_points = malloc(8 * sizeof(t_vector2));
 
 	t_vector2 pm_v = {2, 3};
 	env.p = ft_create_matrix(&pm_v);
-	env.p[0][0] = 1;
-	env.p[0][1] = 0;
-	env.p[0][2] = 0;
-	env.p[1][0] = 0;
-	env.p[1][1] = 1;
-	env.p[1][2] = 0;
-	/*
-	t_vector2 iso_proj_vect = {3, 4};
-	float	**iso_proj = ft_create_matrix(&iso_proj_vect);
-	iso_proj[0][0] = 1;
-	iso_proj[0][1] = 0;
-	iso_proj[0][2] = 0;
-	iso_proj[0][3] = 0;
 
-	iso_proj[1][0] = 0;
-	iso_proj[1][1] = 1;
-	iso_proj[1][2] = 0;
-	iso_proj[1][3] = 0;
+	t_vector2 ro_m_v = {3, 3};
+	env.rotationZ = ft_create_matrix(&ro_m_v);
+	env.rotationY = ft_create_matrix(&ro_m_v);
+	env.rotationX = ft_create_matrix(&ro_m_v);
 
-	iso_proj[2][0] = 0;
-	iso_proj[2][1] = 0;
-	iso_proj[2][2] = 0;
-	iso_proj[2][3] = 1;
-	//ft_print_matrix(iso_proj, &iso_proj_vect);
-	*/
+	env.points[0] = (t_vector3){-0.5, -0.5, -0.5};
+	env.points[1] = (t_vector3){0.5, -0.5, -0.5};
+	env.points[2] = (t_vector3){0.5, 0.5, -0.5};
+	env.points[3] = (t_vector3){-0.5, 0.5, -0.5};
 
-	t_vector2 ro_m_v = {2, 3};
-	env.rotation = ft_create_matrix(&ro_m_v);
+	env.points[4] = (t_vector3){-0.5, -0.5, 0.5};
+	env.points[5] = (t_vector3){0.5, -0.5, 0.5};
+	env.points[6] = (t_vector3){0.5, 0.5, 0.5};
+	env.points[7] = (t_vector3){-0.5, 0.5, 0.5};
 
-	env.ul = &(t_vector3){-50, 50, 0};
-	env.ur = &(t_vector3){50, 50, 0};
-	env.bl = &(t_vector3){-50, -50, 0};
-	env.br = &(t_vector3){50, -50, 0};
-
-	//env.ul_f = ft_vec_to_matrix(env.ul);
-	//env.ur_f = ft_vec_to_matrix(env.ur);
-	//env->bl_f = ft_vec_to_matrix(env->bl);
-	//env->br_f = ft_vec_to_matrix(env->br);
-
-
-	
 	env.mlx = mlx_init();
 	env.win = mlx_new_window(env.mlx, 1280, 720, "rot_cube");
 	env.img = mlx_new_image(env.mlx, 1280, 720);
@@ -70,69 +63,75 @@ int	main(void)
 	
 	mlx_loop_hook(env.mlx, draw, &env);
 	mlx_loop(env.mlx);
-
-	//ft_free_matrix(p, 2);
-	//ft_free_matrix(point, 1);
 	return (0);
 }
 
 int	draw(t_env *env)
 {
-	env->rotation[0][0] = cosf(env->angle);
-	env->rotation[0][1] = -sinf(env->angle);
-	env->rotation[0][2] = 0.0;
+	env->rotationZ[0][0] = cosf(env->angle);
+	env->rotationZ[0][1] = -sinf(env->angle);
+	env->rotationZ[0][2] = 0;
+	env->rotationZ[1][0] = sinf(env->angle);
+	env->rotationZ[1][1] = cosf(env->angle);
+	env->rotationZ[1][2] = 0;
+	env->rotationZ[2][0] = 0;
+	env->rotationZ[2][1] = 0;
+	env->rotationZ[2][2] = 1;
 
-	env->rotation[1][0] = sinf(env->angle);
-	env->rotation[1][1] = cosf(env->angle);
-	env->rotation[1][2] = 0.0;
+	env->rotationX[0][0] = 1;
+	env->rotationX[0][1] = 0;
+	env->rotationX[0][2] = 0;
+	env->rotationX[1][0] = 0;
+	env->rotationX[1][1] = cosf(env->angle);
+	env->rotationX[1][2] = -sinf(env->angle);
+	env->rotationX[2][0] = 0;
+	env->rotationX[2][1] = sinf(env->angle);
+	env->rotationX[2][2] = cosf(env->angle);
 
-	env->ul_f = ft_vec_to_matrix(env->ul);
-	//ft_print_matrix(env->ul_f, &(t_vector2){3, 1});
-	env->ur_f = ft_vec_to_matrix(env->ur);
-	env->bl_f = ft_vec_to_matrix(env->bl);
-	env->br_f = ft_vec_to_matrix(env->br);
-
-	env->projected_2d_ul = ft_matmul(env->p, env->ul_f, &(t_vector3){2, 3, 1});
-	//ft_print_matrix(env->projected_2d_ul, &(t_vector2){2, 1});
-	env->projected_2d_ur = ft_matmul(env->p, env->ur_f, &(t_vector3){2, 3, 1});
-	env->projected_2d_bl = ft_matmul(env->p, env->bl_f, &(t_vector3){2, 3, 1});
-	env->projected_2d_br = ft_matmul(env->p, env->br_f, &(t_vector3){2, 3, 1});
- 
-	env->rotated_2d_ul = ft_matmul(env->rotation, env->projected_2d_ul, &(t_vector3){2, 2, 1});
-	//ft_print_matrix(env->rotated_2d_ul, &(t_vector2){2, 1});
-	env->rotated_2d_ur = ft_matmul(env->rotation, env->projected_2d_ur, &(t_vector3){2, 2, 1});
-	env->rotated_2d_bl = ft_matmul(env->rotation, env->projected_2d_bl, &(t_vector3){2, 2, 1});
-	env->rotated_2d_br = ft_matmul(env->rotation, env->projected_2d_br, &(t_vector3){2, 2, 1});
-
-	env->ul_final_v = ft_matrix_to_vec2(env->rotated_2d_ul);
-	env->ur_final_v = ft_matrix_to_vec2(env->rotated_2d_ur);
-	env->bl_final_v = ft_matrix_to_vec2(env->rotated_2d_bl);
-	env->br_final_v = ft_matrix_to_vec2(env->rotated_2d_br);
-
-	env->ul_final_v = (t_vector2){.x = env->ul_final_v.x + 640,  .y = env->ul_final_v.y + 360};
-	//ft_print_vector2(&env->ul_final_v);
-	env->ur_final_v = (t_vector2){.x = env->ur_final_v.x + 640,  .y = env->ur_final_v.y + 360};
-	env->br_final_v = (t_vector2){.x = env->br_final_v.x + 640,  .y = env->br_final_v.y + 360};
-	env->bl_final_v = (t_vector2){.x = env->bl_final_v.x + 640,  .y = env->bl_final_v.y + 360};
-
-	// Need to take into account the size of the screen and "translate" to a more centered position
-	// before drawing the pixels but I have something moving on the screen and that's a great point
-	// (I'll also have to change the vectors to float instead of int (maybe))
-	// (and also make this code more readable)
+	env->rotationY[0][0] = cosf(env->angle);
+	env->rotationY[0][1] = 0;
+	env->rotationY[0][2] = sinf(env->angle);
+	env->rotationY[1][0] = 0;
+	env->rotationY[1][1] = 1;
+	env->rotationY[1][2] = 0;
+	env->rotationY[2][0] = -sinf(env->angle);
+	env->rotationY[2][1] = 0;
+	env->rotationY[2][2] = cosf(env->angle);
 
 	draw_background(env, (t_vector2){0, 0}, (t_vector2){1280, 720});
-	draw_point(env, env->ul_final_v, 0x0000FF00);
-	draw_point(env, env->ur_final_v, 0x000000FF);
-	draw_point(env, env->bl_final_v, 0x00FF0000);
-	draw_point(env, env->br_final_v, 0x00FF00FF);
 
-	draw_line(env, env->ul_final_v, env->ur_final_v, 0xFFFFFFFF);
-	draw_line(env, env->ul_final_v, env->bl_final_v, 0xFFFFFFFF);
-	draw_line(env, env->ur_final_v, env->br_final_v, 0xFFFFFFFF);
-	draw_line(env, env->bl_final_v, env->br_final_v, 0xFFFFFFFF);
+	for (int i = 0; i < 8; i++)
+	{
+		env->points_matrices[i] = ft_vec_to_matrix(env->points[i]);
+		env->rotated[i] = ft_matmul(env->rotationX, env->points_matrices[i], &(t_vector3){3, 3, 1});
+		env->rotated[i] = ft_matmul(env->rotationY, env->rotated[i], &(t_vector3){3, 3, 1});
+		env->rotated[i] = ft_matmul(env->rotationZ, env->rotated[i], &(t_vector3){3, 3, 1});
+		t_vector3	rotated = ft_matrix_to_vec3(env->rotated[i]);
+		float	z = 1 / (env->distance - rotated.z);
+		env->p[0][0] = z;
+		env->p[0][1] = 0;
+		env->p[0][2] = 0;
+		
+		env->p[1][0] = 0;
+		env->p[1][1] = z;
+		env->p[1][2] = 0;
+		env->projected[i] = ft_matmul(env->p, env->rotated[i], &(t_vector3){2, 3, 1});
+		env->final_points[i] = ft_matrix_to_vec2(env->projected[i]);
+		ft_scale_vector2(&env->final_points[i], env->scale);
+		ft_translate_center(&env->final_points[i]);
+		//draw_point(env, env->final_points[i], 0xFFFFFFFF, 3);
+	}
 
-	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
+	// draw lines
+	for (int i = 0; i < 4; i++)
+	{
+		connect(env, i, (i + 1) % 4, env->final_points);
+		connect(env, i + 4, ((i + 1) % 4) + 4, env->final_points);
+		connect(env, i, i + 4, env->final_points);
+	}
+	
 	env->angle += 0.01;
+	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 	return (0);
 }
 
@@ -147,6 +146,13 @@ int	key_handler(int keycode, t_env *env)
 	if (keycode == 53 || keycode == 65307)
 		close_window(env);
 	return (0);
+}
+
+void	connect(t_env *env, int i, int j, t_vector2 *points)
+{
+	t_vector2	a = points[i];
+	t_vector2	b = points[j];
+	draw_line(env, a, b, 0xFFFFFFFF);
 }
 
 void	put_mlx_pixel(t_env *env, t_vector2 *v, int color)
@@ -173,15 +179,16 @@ void	draw_background(t_env *env, t_vector2 s, t_vector2 e)
 	}
 }
 
-void draw_point(t_env *env, t_vector2 p, int col)
+void draw_point(t_env *env, t_vector2 p, int col, int strokeweight)
 {
-    for (int y = p.y - 2; y <= p.y + 2; y++)
-    {
-        for (int x = p.x - 2; x <= p.x + 2; x++)
-        {
-            put_mlx_pixel(env, &(t_vector2){x, y}, col);
-        }
-    }
+	strokeweight = strokeweight <= 0 ? 1 : strokeweight;
+	for (int y = p.y - strokeweight; y <= p.y + strokeweight; y++)
+	{
+		for (int x = p.x - strokeweight; x <= p.x + strokeweight; x++)
+		{
+			put_mlx_pixel(env, &(t_vector2){x, y}, col);
+		}
+	}
 }
 
 void	draw_line(t_env *env, t_vector2 s, t_vector2 e, int col)
@@ -212,4 +219,10 @@ void	draw_line(t_env *env, t_vector2 s, t_vector2 e, int col)
 		y = y + delta_y;
 		i++;
 	}
+}
+
+void	ft_translate_center(t_vector2 *v)
+{
+	v->x += WIN_W / 2;
+	v->y += WIN_H / 2;
 }
