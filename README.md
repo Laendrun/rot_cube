@@ -6,7 +6,7 @@ I wanted to try and recreate one of his coding challenge in C using MiniLibX.
 
 [Coding Challenge #112: 3D Rendering with Rotation and Projection](https://youtu.be/p4Iz0XJY-Qk)
 
-## Description
+## Description
 
 This project "simply" makes a 2D projection of some 3D points representing a cube.
 
