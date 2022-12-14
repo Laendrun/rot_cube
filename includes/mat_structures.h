@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:41:00 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/12 21:27:08 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/14 19:14:38 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 # define MAT_STRUCTURES_H
 
 typedef struct s_vector3 {
-	int		x;
-	int		y;
-	int		z;
+	float		x;
+	float		y;
+	float		z;
 }				t_vector3;
 
 typedef struct s_vector2 {
-	int		x;
-	int		y;
+	float		x;
+	float		y;
 }				t_vector2;
 
 #endif

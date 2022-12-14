@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:45:35 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/12 21:34:22 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/14 20:02:37 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,12 @@
 
 float	**ft_matmul(float **a, float **b, t_vector3 *v)
 {
+	/*
+	 * v->x : rowsA
+	 * v->y : colsA
+	 * v->z : colsB
+	 */
 	float **result = malloc(v->x * sizeof(float *));
-
 	for (int i = 0; i < v->x; i++) 
 	{
 		result[i] = malloc(v->z * sizeof(float));
@@ -24,7 +28,7 @@ float	**ft_matmul(float **a, float **b, t_vector3 *v)
 			float	sum = 0;
 			for (int k = 0; k < v->y; k++)
 				sum += a[i][k] * b[k][j];
-			result[j][i] = sum;
+			result[i][j] = sum;
 		}
 	}
 	return (result);
@@ -32,7 +36,7 @@ float	**ft_matmul(float **a, float **b, t_vector3 *v)
 
 void	ft_print_matrix(float **a, t_vector2 *v)
 {
-	printf("%dx%d\n", v->x, v->y);
+	printf("%fx%f\n", v->x, v->y);
 	printf("-------\n");
 	for (int i = 0; i < v->x; i++) 
 	{
@@ -85,19 +89,21 @@ t_vector2	ft_matrix_to_vec2(float **m)
 	t_vector2	v;;
 
 	v.x = m[0][0];
-	v.y = m[0][1];
+	v.y = m[1][0];
 	return (v);
 }
 
 void	ft_print_vector2(t_vector2 *v)
 {
-	printf("v->x : %d\n", v->x);
-	printf("v->y : %d\n", v->y);
+	printf("=====VECTOR 2=====\n");
+	printf("v->x : %f\n", v->x);
+	printf("v->y : %f\n", v->y);
 }
 
 void	ft_print_vector3(t_vector3 *v)
 {
-	printf("v->x : %d\n", v->x);
-	printf("v->y : %d\n", v->y);
-	printf("v->z : %d\n", v->z);
+	printf("=====VECTOR 3=====\n");
+	printf("v->x : %f\n", v->x);
+	printf("v->y : %f\n", v->y);
+	printf("v->z : %f\n", v->z);
 }

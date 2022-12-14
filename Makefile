@@ -12,6 +12,9 @@ all: $(NAME)
 $(NAME): $(OBJ) $(MAT_OBJ)
 	gcc $(CCFLAGS) $^ -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
+debug: $(OBJ) $(MAT_OBJ)
+	gcc $(CCFLAGS) $^ -fsanitize=address -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+
 # MacOs
 %.o: %.c
 	gcc $(CCFLAGS) -Imlx -Iincludes -c $< -o $@

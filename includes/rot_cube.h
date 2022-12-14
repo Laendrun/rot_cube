@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:36:34 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/12 23:14:09 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/14 20:32:27 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,7 @@ void	put_mlx_pixel(t_env *env, t_vector2 *v, int color);
 void	put_rect(t_env *env, t_vector2 *s_v, t_vector2 *e_v, int color);
 int		draw(t_env *env);
 void	draw_background(t_env *env, t_vector2 s, t_vector2 e);
+void	draw_point(t_env *env, t_vector2 p, int col);
+void	draw_line(t_env *env, t_vector2 s, t_vector2 e, int col);
 
 #endif
