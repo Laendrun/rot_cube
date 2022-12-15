@@ -44,6 +44,6 @@ The third one let's you specify a scaling for the cube (default: 100), and a dis
 
 ## Warnings
 
-There will surely be some memory leaks, I didn't check that for now.
+:warning: There will surely be some memory leaks, I didn't check that for now.
 
-There could be some weird things happening if you scale the cube up enough to go around the edges, I didn't do anything to check that.
+:warning: There could be some weird things happening if you scale the cube up enough to go around the edges, I didn't do anything to check that.
