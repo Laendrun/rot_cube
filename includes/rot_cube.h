@@ -6,14 +6,14 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:36:34 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/15 11:45:48 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/15 14:33:53 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ROT_CUBE_H
 # define ROT_CUBE_H
-# define WIN_H 360
-# define WIN_W 640
+# define WIN_H 720
+# define WIN_W 1280
 # include "mat.h"
 # include "mlx.h"
 # include <stdio.h>

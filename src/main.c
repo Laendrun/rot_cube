@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:35:57 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/15 11:50:54 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/15 14:38:00 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,8 +206,6 @@ void	draw_line(t_env *env, t_vector2 s, t_vector2 e, int col)
 
 	delta_x = e.x - s.x;
 	delta_y = e.y - s.y;
-
-	//printf("dx: %f, dy: %f\n", delta_x, delta_y);
 
 	if (fabsf(delta_x) >= fabsf(delta_y))
 		step = fabsf(delta_x);
