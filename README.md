@@ -42,7 +42,7 @@ The third one let's you specify a scaling for the cube (default: 100), and a dis
 
 (I will maybe add some other variants later).
 
-![](https://github.com/Laendrun/rot_cube/tree/main/img/example.gif)
+![](https://github.com/Laendrun/rot_cube/blob/main/img/example.gif)
 
 > Yes, the GIF is slow as fu** but you at least have an idea of what you should see.
 
