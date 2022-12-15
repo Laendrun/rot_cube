@@ -48,5 +48,3 @@ The third one let's you specify a scaling for the cube (default: 100), and a dis
 
 :warning: There could be some weird things happening if you scale the cube up enough to go around the edges, I didn't do anything to check that.
 
-![out](https://user-images.githubusercontent.com/24452010/207835979-696a2827-77da-41af-9e44-d0237b0f1fa6.gif)
-
