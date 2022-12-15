@@ -1,6 +1,6 @@
 # ROT_CUBE (Rotating Cube)
 
-This project was inspired by Daniel Shiffmann (The Coding Train).
+This project was inspired by [Daniel Shiffmann](https://github.com/shiffman).
 
 I wanted to try and recreate one of his coding challenge in C using MiniLibX.
 
