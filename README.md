@@ -32,17 +32,23 @@ You can then run the program using one of the following commands :
 ./rot_cub <distance>
 
 ./rot_cub <scale> <distance>
+
+./rot_cube <hex color 0xFFFFFFFF> <scale> <distance>
 ```
 
-The first one simply runs the program with a distance set to ```1``` by default.
+1. The first one simply runs the program with a distance set to ```1``` by default.
 
-The second one let's you specify a distance for the perspective.
+2. The second one let's you specify a distance for the perspective.
 
-The third one let's you specify a scaling for the cube (default: 100), and a distance.
+3. The third one let's you specify a scaling for the cube (default: 100), and a distance.
+
+4. The fourth one let's you choose a color for the cube, the scale and the distance.
 
 (I will maybe add some other variants later).
 
 ![](https://github.com/Laendrun/rot_cube/blob/main/img/example.gif)
+
+![](https://github.com/Laendrun/rot_cube/blob/main/img/color.gif)
 
 > Yes, the GIF is slow as fu** but you at least have an idea of what you should see.
 
@@ -51,4 +57,3 @@ The third one let's you specify a scaling for the cube (default: 100), and a dis
 :warning: There will surely be some memory leaks, I didn't check that for now.
 
 :warning: There could be some weird things happening if you scale the cube up enough to go around the edges, I didn't do anything to check that.
-

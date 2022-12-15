@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:35:57 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/15 00:55:01 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/15 11:50:54 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,21 @@ int	main(int ac, char *av[])
 		env.scale = atof(av[1]);
 		env.distance = atof(av[2]);
 	}
+	else if (ac == 4)
+	{
+		env.color = strtol(av[1], NULL, 16);
+		env.scale = atof(av[2]);
+		env.distance = atof(av[3]);
+	}
 	else
 	{
+		env.color = 0xFFFFFFFF;
 		env.distance = 1;
 		env.scale = 100;
 	}
 
-	env.angle = 0.01;
+	env.angle_update = 0.01;
+	env.angle = 0;
 	env.points = malloc(8 * sizeof(t_vector3));
 	env.points_matrices = malloc(8 * sizeof(float **));
 	env.rotated = malloc(8 * sizeof(float **));
@@ -54,8 +62,8 @@ int	main(int ac, char *av[])
 	env.points[7] = (t_vector3){-0.5, 0.5, 0.5};
 
 	env.mlx = mlx_init();
-	env.win = mlx_new_window(env.mlx, 1280, 720, "rot_cube");
-	env.img = mlx_new_image(env.mlx, 1280, 720);
+	env.win = mlx_new_window(env.mlx, WIN_W, WIN_H, "rot_cube");
+	env.img = mlx_new_image(env.mlx, WIN_W, WIN_H);
 	env.addr = mlx_get_data_addr(env.img, &env.bits_per_pixel, &env.line_length, &env.endian);
 
 	mlx_hook(env.win, 2, 1L << 0, key_handler, &env);
@@ -119,7 +127,7 @@ int	draw(t_env *env)
 		env->final_points[i] = ft_matrix_to_vec2(env->projected[i]);
 		ft_scale_vector2(&env->final_points[i], env->scale);
 		ft_translate_center(&env->final_points[i]);
-		//draw_point(env, env->final_points[i], 0xFFFFFFFF, 3);
+		//draw_point(env, env->final_points[i], env->color, 3);
 	}
 
 	// draw lines
@@ -130,7 +138,7 @@ int	draw(t_env *env)
 		connect(env, i, i + 4, env->final_points);
 	}
 	
-	env->angle += 0.01;
+	env->angle += env->angle_update;
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 	return (0);
 }
@@ -152,7 +160,7 @@ void	connect(t_env *env, int i, int j, t_vector2 *points)
 {
 	t_vector2	a = points[i];
 	t_vector2	b = points[j];
-	draw_line(env, a, b, 0xFFFFFFFF);
+	draw_line(env, a, b, env->color);
 }
 
 void	put_mlx_pixel(t_env *env, t_vector2 *v, int color)

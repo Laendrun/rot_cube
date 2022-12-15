@@ -6,14 +6,14 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:36:34 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/15 00:55:18 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/15 11:45:48 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ROT_CUBE_H
 # define ROT_CUBE_H
-# define WIN_H 720
-# define WIN_W 1280
+# define WIN_H 360
+# define WIN_W 640
 # include "mat.h"
 # include "mlx.h"
 # include <stdio.h>
@@ -28,9 +28,11 @@ typedef struct s_env {
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
+	int			color;
 	float		distance;
 	float		scale;
 	float		angle;
+	float		angle_update;
 	float		**p;
 	float		**rotationZ;
 	float		**rotationY;
