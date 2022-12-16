@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saeby <saeby>                              +#+  +:+       +#+        */
+/*   By: saeby <saeby@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:35:57 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/15 14:38:00 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/15 16:59:47 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 int	main(int ac, char *av[])
 {
 	t_env env;
+	env.color = 0xFFFFFFFF;
+	env.distance = 1;
+	env.scale = 100;
+
 	if (ac == 2)
 		env.distance = atof(av[1]);
 	else if (ac == 3)
@@ -28,15 +32,9 @@ int	main(int ac, char *av[])
 		env.scale = atof(av[2]);
 		env.distance = atof(av[3]);
 	}
-	else
-	{
-		env.color = 0xFFFFFFFF;
-		env.distance = 1;
-		env.scale = 100;
-	}
 
-	env.angle_update = 0.01;
 	env.angle = 0;
+	env.angle_update = 0.01;
 	env.points = malloc(8 * sizeof(t_vector3));
 	env.points_matrices = malloc(8 * sizeof(float **));
 	env.rotated = malloc(8 * sizeof(float **));
