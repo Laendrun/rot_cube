@@ -48,6 +48,8 @@ You can then run the program using one of the following commands :
 
 ![](https://github.com/Laendrun/rot_cube/blob/main/img/color.gif)
 
+![](https://github.com/Laendrun/rot_cube/blob/main/img/pyramide.gif)
+
 ## Other shapes
 
 You can generate other rotating shapes by changing one line in the `rot_cube.h` file.
