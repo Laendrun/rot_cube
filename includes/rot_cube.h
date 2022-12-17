@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rot_cube.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saeby <saeby>                              +#+  +:+       +#+        */
+/*   By: saeby <saeby@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:36:34 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/17 12:17:02 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/17 21:10:39 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,20 @@
 # define ROT_CUBE_H
 # define WIN_H 720
 # define WIN_W 1280
+#define CUBE
+//#define PYRAMIDE
 # include "mat.h"
 # include "mlx.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
+
+# ifdef CUBE
+#  define POINTS 8
+# endif
+# ifdef PYRAMIDE
+#  define POINTS 4
+# endif
 
 typedef struct s_env {
 	void		*mlx;
@@ -68,6 +77,7 @@ int		mouse_handler(int mouse_code, int x, int y, t_env *env);
 // init.c
 void	init(t_env *env);
 void	create_cube(t_env *env);
+void	create_pyr(t_env *env);
 
 // update.c
 void	update_rotation_matrices(t_env *env);

@@ -44,13 +44,37 @@ You can then run the program using one of the following commands :
 
 4. The fourth one let's you choose a color for the cube, the scale and the distance.
 
-(I will maybe add some other variants later).
-
 ![](https://github.com/Laendrun/rot_cube/blob/main/img/example.gif)
 
 ![](https://github.com/Laendrun/rot_cube/blob/main/img/color.gif)
 
-> Yes, the GIF is slow as fu** but you at least have an idea of what you should see.
+## Other shapes
+
+You can generate other rotating shapes by changing one line in the `rot_cube.h` file.
+
+You can generate these shapes :
+- Cube
+- Pyramide
+
+Here's what's written at the top of the header file right now :
+
+```c
+#ifndef ROT_CUBE_H
+# define ROT_CUBE_H
+# define WIN_H 720
+# define WIN_W 1280
+#define CUBE
+//#define PYRAMIDE
+```
+
+You can simply switch which line is commented like so :
+
+```c
+//#define CUBE
+#define PYRAMIDE
+```
+
+:warning: You can't have both shape at the same time, this will probably make the program crash.
 
 ## Warnings
 

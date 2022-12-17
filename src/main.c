@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saeby <saeby>                              +#+  +:+       +#+        */
+/*   By: saeby <saeby@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:35:57 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/17 12:31:23 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/17 21:03:53 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ int	main(int ac, char *av[])
 		env.distance = atof(av[3]);
 	}
 	init(&env);
+#ifdef CUBE
 	create_cube(&env);
-
+#endif
+#ifdef PYRAMIDE
+	create_pyr(&env);
+#endif
 	env.mlx = mlx_init();
 	env.win = mlx_new_window(env.mlx, WIN_W, WIN_H, "rot_cube");
 	env.img = mlx_new_image(env.mlx, WIN_W, WIN_H);
@@ -54,7 +58,7 @@ int	render(t_env *env)
 	update_rotation_matrices(env);
 	draw_background(env, (t_vector2){0, 0}, (t_vector2){1280, 720});
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < POINTS; i++)
 	{
 		env->points_matrices[i] = ft_vec_to_matrix(env->points[i]);
 		env->rotated[i] = ft_matmul(env->rotationX, env->points_matrices[i], &(t_vector3){3, 3, 1});
@@ -74,14 +78,25 @@ int	render(t_env *env)
 		ft_translate_center(&env->final_points[i]);
 	}
 
-	// draw lines
+#ifdef CUBE
 	for (int i = 0; i < 4; i++)
 	{
 		connect(env, i, (i + 1) % 4, env->final_points);
 		connect(env, i + 4, ((i + 1) % 4) + 4, env->final_points);
 		connect(env, i, i + 4, env->final_points);
 	}
-	
+#endif
+
+#ifdef PYRAMIDE
+	connect(env, 0, 1, env->final_points);
+	connect(env, 1, 2, env->final_points);
+	connect(env, 2, 0, env->final_points);
+
+	connect(env, 0, 3, env->final_points);
+	connect(env, 1, 3, env->final_points);
+	connect(env, 2, 3, env->final_points);
+#endif
+
 	env->angle += env->angle_update;
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 	return (0);

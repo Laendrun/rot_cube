@@ -37,8 +37,7 @@ debug: $(OBJ) $(MAT_OBJ)
 
 # MacOs
 %.o: %.c
-	@echo "$(CYAN)Compiling mlx$(DEF_COLOR)"
-	make -C mlx/
+	@make -C mlx/
 	gcc $(CCFLAGS) -Imlx -Iincludes -c $< -o $@
 
 clean:
@@ -48,8 +47,10 @@ fclean: clean
 	make fclean -C mlx/
 	rm -f $(NAME)
 
-mlx:
-	@$(MAKE) re -C mlx/
+shape:
+	rm -f $(OBJ)
+	rm -f $(NAME)
+	$(MAKE)
 
 re: fclean all
 

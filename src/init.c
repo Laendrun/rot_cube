@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saeby <saeby>                              +#+  +:+       +#+        */
+/*   By: saeby <saeby@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 12:11:11 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/17 12:28:20 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/17 21:04:30 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rot_cube.h"
-#define POINTS 8
 
 void	init(t_env *env)
 {
@@ -45,4 +44,12 @@ void	create_cube(t_env *env)
 	env->points[5] = (t_vector3){0.5, -0.5, 0.5};
 	env->points[6] = (t_vector3){0.5, 0.5, 0.5};
 	env->points[7] = (t_vector3){-0.5, 0.5, 0.5};
+}
+
+void	create_pyr(t_env *env)
+{
+	env->points[0] = (t_vector3){-0.3, 0, 0};
+	env->points[1] = (t_vector3){0.3, 0, 0};
+	env->points[2] = (t_vector3){0, -0.3, 0};
+	env->points[3] = (t_vector3){0, 0, -0.3};
 }
