@@ -11,7 +11,14 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 
 NAME = rot_cube
-SRC = $(addprefix src/, main.c)
+SRC = $(addprefix src/, main.c \
+						inputs.c \
+						draw.c \
+						draw_utils.c \
+						utils.c \
+						init.c \
+						update.c \
+								)
 MAT_SRC = $(addprefix mat/, mat.c)
 OBJ := $(SRC:%.c=%.o)
 MAT_OBJ := $(MAT_SRC:%.c=%.o)

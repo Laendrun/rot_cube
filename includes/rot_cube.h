@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:36:34 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/17 00:55:58 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/17 12:17:02 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,30 @@ typedef struct s_env {
 }				t_env;
 
 // main.c
-int		key_handler(int keycode, t_env *env);
-int	mouse_handler(int mouse_code, int x, int y, t_env *env);
+int		render(t_env *env);
+
+// utils.c
 int		close_window(t_env *env);
-void	put_mlx_pixel(t_env *env, t_vector2 v, int color);
-void	put_rect(t_env *env, t_vector2 *s_v, t_vector2 *e_v, int color);
-int		draw(t_env *env);
-void	draw_background(t_env *env, t_vector2 s, t_vector2 e);
-void	draw_point(t_env *env, t_vector2 p, int col, int strokeweight);
-void	draw_line(t_env *env, t_vector2 s, t_vector2 e, int col);
-void	connect(t_env *env, int i, int j, t_vector2 *points);
 void	ft_translate_center(t_vector2 *v);
+
+// draw.c
+void	draw_background(t_env *env, t_vector2 s, t_vector2 e);
+void	draw_line(t_env *env, t_vector2 s, t_vector2 e, int col);
+void	put_rect(t_env *env, t_vector2 *s_v, t_vector2 *e_v, int color);
+
+// draw_utils.c
+void	connect(t_env *env, int i, int j, t_vector2 *points);
+void	put_mlx_pixel(t_env *env, t_vector2 v, int color);
+
+// inputs.c
+int		key_handler(int keycode, t_env *env);
+int		mouse_handler(int mouse_code, int x, int y, t_env *env);
+
+// init.c
+void	init(t_env *env);
+void	create_cube(t_env *env);
+
+// update.c
+void	update_rotation_matrices(t_env *env);
 
 #endif

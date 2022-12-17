@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:35:57 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/17 00:59:25 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/17 12:31:23 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,32 +32,8 @@ int	main(int ac, char *av[])
 		env.scale = atof(av[2]);
 		env.distance = atof(av[3]);
 	}
-	env.trigger = 0;
-	env.angle = 0;
-	env.angle_update = 0.01;
-	env.points = malloc(8 * sizeof(t_vector3));
-	env.points_matrices = malloc(8 * sizeof(float **));
-	env.rotated = malloc(8 * sizeof(float **));
-	env.projected = malloc(8 * sizeof(float **));
-	env.final_points = malloc(8 * sizeof(t_vector2));
-
-	t_vector2 pm_v = {2, 3};
-	env.p = ft_create_matrix(&pm_v);
-
-	t_vector2 ro_m_v = {3, 3};
-	env.rotationZ = ft_create_matrix(&ro_m_v);
-	env.rotationY = ft_create_matrix(&ro_m_v);
-	env.rotationX = ft_create_matrix(&ro_m_v);
-
-	env.points[0] = (t_vector3){-0.5, -0.5, -0.5};
-	env.points[1] = (t_vector3){0.5, -0.5, -0.5};
-	env.points[2] = (t_vector3){0.5, 0.5, -0.5};
-	env.points[3] = (t_vector3){-0.5, 0.5, -0.5};
-
-	env.points[4] = (t_vector3){-0.5, -0.5, 0.5};
-	env.points[5] = (t_vector3){0.5, -0.5, 0.5};
-	env.points[6] = (t_vector3){0.5, 0.5, 0.5};
-	env.points[7] = (t_vector3){-0.5, 0.5, 0.5};
+	init(&env);
+	create_cube(&env);
 
 	env.mlx = mlx_init();
 	env.win = mlx_new_window(env.mlx, WIN_W, WIN_H, "rot_cube");
@@ -67,45 +43,15 @@ int	main(int ac, char *av[])
 	mlx_hook(env.win, 4, 0, mouse_handler, &env);
 	mlx_hook(env.win, 2, 1L << 0, key_handler, &env);
 	mlx_hook(env.win, 17, 1L << 0, close_window, &env);
-	//mlx_mouse_hook(env.win, mouse_handler, &env);
 	
-	mlx_loop_hook(env.mlx, draw, &env);
+	mlx_loop_hook(env.mlx, render, &env);
 	mlx_loop(env.mlx);
 	return (0);
 }
 
-int	draw(t_env *env)
+int	render(t_env *env)
 {
-	env->rotationZ[0][0] = cosf(env->angle);
-	env->rotationZ[0][1] = -sinf(env->angle);
-	env->rotationZ[0][2] = 0;
-	env->rotationZ[1][0] = sinf(env->angle);
-	env->rotationZ[1][1] = cosf(env->angle);
-	env->rotationZ[1][2] = 0;
-	env->rotationZ[2][0] = 0;
-	env->rotationZ[2][1] = 0;
-	env->rotationZ[2][2] = 1;
-
-	env->rotationX[0][0] = 1;
-	env->rotationX[0][1] = 0;
-	env->rotationX[0][2] = 0;
-	env->rotationX[1][0] = 0;
-	env->rotationX[1][1] = cosf(env->angle);
-	env->rotationX[1][2] = -sinf(env->angle);
-	env->rotationX[2][0] = 0;
-	env->rotationX[2][1] = sinf(env->angle);
-	env->rotationX[2][2] = cosf(env->angle);
-
-	env->rotationY[0][0] = cosf(env->angle);
-	env->rotationY[0][1] = 0;
-	env->rotationY[0][2] = sinf(env->angle);
-	env->rotationY[1][0] = 0;
-	env->rotationY[1][1] = 1;
-	env->rotationY[1][2] = 0;
-	env->rotationY[2][0] = -sinf(env->angle);
-	env->rotationY[2][1] = 0;
-	env->rotationY[2][2] = cosf(env->angle);
-
+	update_rotation_matrices(env);
 	draw_background(env, (t_vector2){0, 0}, (t_vector2){1280, 720});
 
 	for (int i = 0; i < 8; i++)
@@ -114,8 +60,7 @@ int	draw(t_env *env)
 		env->rotated[i] = ft_matmul(env->rotationX, env->points_matrices[i], &(t_vector3){3, 3, 1});
 		env->rotated[i] = ft_matmul(env->rotationY, env->rotated[i], &(t_vector3){3, 3, 1});
 		env->rotated[i] = ft_matmul(env->rotationZ, env->rotated[i], &(t_vector3){3, 3, 1});
-		t_vector3	rotated = ft_matrix_to_vec3(env->rotated[i]);
-		float	z = 1 / (env->distance - rotated.z);
+		float	z = 1 / (env->distance - env->rotated[i][2][0]);
 		env->p[0][0] = z;
 		env->p[0][1] = 0;
 		env->p[0][2] = 0;
@@ -142,53 +87,6 @@ int	draw(t_env *env)
 	return (0);
 }
 
-int	close_window(t_env *env)
-{
-	mlx_destroy_window(env->mlx, env->win);
-	exit(0);
-}
-
-int	key_handler(int keycode, t_env *env)
-{
-	if (keycode == 53 || keycode == 65307)
-		close_window(env);
-	return (0);
-}
-
-void	update_scale(t_env *env, int u)
-{
-	printf("%f\n", env->scale);
-}
-
-int	mouse_handler(int mouse_code, int x, int y, t_env *env)
-{
-	if (mouse_code == 4 && env->scale > 5)
-			env->scale-= 5;
-	if (mouse_code == 5)
-		env->scale += 5;
-	
-	return (0);
-}
-
-void	connect(t_env *env, int i, int j, t_vector2 *points)
-{
-	t_vector2	a = points[i];
-	t_vector2	b = points[j];
-	draw_line(env, a, b, env->color);
-}
-
-void	put_mlx_pixel(t_env *env, t_vector2 v, int color)
-{
-	char	*dst;
-
-	if (v.x >= 0 && v.x < WIN_W && v.y >= 0 && v.y < WIN_H)
-	{	
-		dst = env->addr + ((int)v.y * env->line_length \
-									+ (int)v.x * (env->bits_per_pixel / 8));
-		*(unsigned int *)dst = color;
-	}
-}
-
 void	draw_background(t_env *env, t_vector2 s, t_vector2 e)
 {
 	int	i;
@@ -202,18 +100,6 @@ void	draw_background(t_env *env, t_vector2 s, t_vector2 e)
 		}
 		i = s.x;
 		s.y++;
-	}
-}
-
-void draw_point(t_env *env, t_vector2 p, int col, int strokeweight)
-{
-	strokeweight = strokeweight <= 0 ? 1 : strokeweight;
-	for (int y = p.y - strokeweight; y <= p.y + strokeweight; y++)
-	{
-		for (int x = p.x - strokeweight; x <= p.x + strokeweight; x++)
-		{
-			put_mlx_pixel(env, (t_vector2){x, y}, col);
-		}
 	}
 }
 
@@ -243,10 +129,4 @@ void	draw_line(t_env *env, t_vector2 s, t_vector2 e, int col)
 		y = y + delta_y;
 		i++;
 	}
-}
-
-void	ft_translate_center(t_vector2 *v)
-{
-	v->x += WIN_W / 2;
-	v->y += WIN_H / 2;
 }
