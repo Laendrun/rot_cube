@@ -6,7 +6,7 @@
 /*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:36:34 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/15 14:33:53 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/17 00:55:58 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_env {
 	void		*win;
 	void		*img;
 	char		*addr;
+	int			trigger;
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
@@ -46,8 +47,9 @@ typedef struct s_env {
 
 // main.c
 int		key_handler(int keycode, t_env *env);
+int	mouse_handler(int mouse_code, int x, int y, t_env *env);
 int		close_window(t_env *env);
-void	put_mlx_pixel(t_env *env, t_vector2 *v, int color);
+void	put_mlx_pixel(t_env *env, t_vector2 v, int color);
 void	put_rect(t_env *env, t_vector2 *s_v, t_vector2 *e_v, int color);
 int		draw(t_env *env);
 void	draw_background(t_env *env, t_vector2 s, t_vector2 e);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saeby <saeby@student.42.fr>                +#+  +:+       +#+        */
+/*   By: saeby <saeby>                              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 17:35:57 by saeby             #+#    #+#             */
-/*   Updated: 2022/12/15 16:59:47 by saeby            ###   ########.fr       */
+/*   Updated: 2022/12/17 00:59:25 by saeby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int ac, char *av[])
 		env.scale = atof(av[2]);
 		env.distance = atof(av[3]);
 	}
-
+	env.trigger = 0;
 	env.angle = 0;
 	env.angle_update = 0.01;
 	env.points = malloc(8 * sizeof(t_vector3));
@@ -64,8 +64,10 @@ int	main(int ac, char *av[])
 	env.img = mlx_new_image(env.mlx, WIN_W, WIN_H);
 	env.addr = mlx_get_data_addr(env.img, &env.bits_per_pixel, &env.line_length, &env.endian);
 
+	mlx_hook(env.win, 4, 0, mouse_handler, &env);
 	mlx_hook(env.win, 2, 1L << 0, key_handler, &env);
 	mlx_hook(env.win, 17, 1L << 0, close_window, &env);
+	//mlx_mouse_hook(env.win, mouse_handler, &env);
 	
 	mlx_loop_hook(env.mlx, draw, &env);
 	mlx_loop(env.mlx);
@@ -125,7 +127,6 @@ int	draw(t_env *env)
 		env->final_points[i] = ft_matrix_to_vec2(env->projected[i]);
 		ft_scale_vector2(&env->final_points[i], env->scale);
 		ft_translate_center(&env->final_points[i]);
-		//draw_point(env, env->final_points[i], env->color, 3);
 	}
 
 	// draw lines
@@ -154,6 +155,21 @@ int	key_handler(int keycode, t_env *env)
 	return (0);
 }
 
+void	update_scale(t_env *env, int u)
+{
+	printf("%f\n", env->scale);
+}
+
+int	mouse_handler(int mouse_code, int x, int y, t_env *env)
+{
+	if (mouse_code == 4 && env->scale > 5)
+			env->scale-= 5;
+	if (mouse_code == 5)
+		env->scale += 5;
+	
+	return (0);
+}
+
 void	connect(t_env *env, int i, int j, t_vector2 *points)
 {
 	t_vector2	a = points[i];
@@ -161,12 +177,16 @@ void	connect(t_env *env, int i, int j, t_vector2 *points)
 	draw_line(env, a, b, env->color);
 }
 
-void	put_mlx_pixel(t_env *env, t_vector2 *v, int color)
+void	put_mlx_pixel(t_env *env, t_vector2 v, int color)
 {
 	char	*dst;
 
-	dst = env->addr + ((int)v->y * env->line_length + (int)v->x * (env->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	if (v.x >= 0 && v.x < WIN_W && v.y >= 0 && v.y < WIN_H)
+	{	
+		dst = env->addr + ((int)v.y * env->line_length \
+									+ (int)v.x * (env->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
 }
 
 void	draw_background(t_env *env, t_vector2 s, t_vector2 e)
@@ -177,7 +197,7 @@ void	draw_background(t_env *env, t_vector2 s, t_vector2 e)
 	{
 		while (i <= e.x)
 		{
-			put_mlx_pixel(env, &(t_vector2){i, s.y}, 0x000000);
+			put_mlx_pixel(env, (t_vector2){i, s.y}, 0x000000);
 			i++;
 		}
 		i = s.x;
@@ -192,7 +212,7 @@ void draw_point(t_env *env, t_vector2 p, int col, int strokeweight)
 	{
 		for (int x = p.x - strokeweight; x <= p.x + strokeweight; x++)
 		{
-			put_mlx_pixel(env, &(t_vector2){x, y}, col);
+			put_mlx_pixel(env, (t_vector2){x, y}, col);
 		}
 	}
 }
@@ -218,7 +238,7 @@ void	draw_line(t_env *env, t_vector2 s, t_vector2 e, int col)
 	i = 0;
 	while (i < step)
 	{
-		put_mlx_pixel(env, &(t_vector2){x, y}, col);
+		put_mlx_pixel(env, (t_vector2){x, y}, col);
 		x = x + delta_x;
 		y = y + delta_y;
 		i++;
